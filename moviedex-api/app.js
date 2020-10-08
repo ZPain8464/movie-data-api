@@ -16,7 +16,11 @@ function validateBearerToken(req, res, next) {
   const authToken = req.get("Authorization");
   const apiToken = process.env.API_TOKEN;
 
-  if (!authToken || authToken.split(" ")[1] !== apiToken) {
+  if (
+    !authToken ||
+    !authToken.includes("Bearer") ||
+    authToken.split(" ")[1] !== apiToken
+  ) {
     return res.status(401).json({ error: "Unauthorized Request" });
   }
 
@@ -44,9 +48,9 @@ function handleGetMovies(req, res) {
 
   const avgVote = parseFloat(req.query.avg_vote);
 
-  if (Number.isNaN(avgVote)) {
-    return res.send("Average vote must be a number");
-  }
+  // if (Number.isNaN(avgVote)) {
+  //   return res.send("Average vote must be a number");
+  // }
 
   if (req.query.avg_vote) {
     response = response.filter((movies) => {
